@@ -18,3 +18,9 @@ The Vision Transformer model for self-supervised learning of three teacher netwo
 ```
 python T3-S1 Network.py
 ```
+## Evaluation
+In this paper, two approaches are proposed for the evaluation of the multi-teacher knowledge distillation architecture. One method is to stitch together the feature dimensions in multiple model output tensors, and the other is to directly add the output tensors while keeping the feature dimensions unchanged.
+### Evaluation of the DINO model
+```
+python linear.py
+```
