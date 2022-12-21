@@ -104,32 +104,26 @@ if __name__ == '__main__':
 
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     # build model
-    #model = vits.__dict__[args.arch](patch_size=args.patch_size, num_classes=0)                                        # 原代码
-    model1 = vits.__dict__[args.arch](patch_size=args.patch_size, num_classes=0)                                        # 此处进行了修改
-    model2 = vits.__dict__[args.arch](patch_size=args.patch_size, num_classes=0)                                        # 此处进行了修改
-    #for p in model.parameters():                                                                                       # 原代码
-    #    p.requires_grad = False
-    for p in model1.parameters():                                                                                       # 此处进行了修改
+    model1 = vits.__dict__[args.arch](patch_size=args.patch_size, num_classes=0)                                        
+    model2 = vits.__dict__[args.arch](patch_size=args.patch_size, num_classes=0)                                        
+    for p in model1.parameters():                                                                                       
         p.requires_grad = False
-    for p in model2.parameters():                                                                                       # 此处进行了修改
+    for p in model2.parameters():                                                                                      
         p.requires_grad = False
-    #model.eval()                                                                                                       # 原代码
-    #model.to(device)
-    model1.eval()                                                                                                       # 此处进行了修改
+    model1.eval()                                                                                                      
     model1.to(device)
-    model2.eval()                                                                                                       # 此处进行了修改
+    model2.eval()                                                                                                      
     model2.to(device)
     utils.load_pretrained_weights(model1, args.pretrained_weights, args.checkpoint_key1, args.arch,
-                                  args.patch_size)                                                                      # 此处进行了修改
+                                  args.patch_size)                                                                      
     utils.load_pretrained_weights(model2, args.pretrained_weights, args.checkpoint_key2, args.arch,
-                                  args.patch_size)                                                                      # 此处进行了修改
+                                  args.patch_size)                                                                      
 
     # open image
     if args.image_path is None:
         # user has not specified any image - we use our own image
-        #print("Please use the `--image_path` argument to indicate the path of the image you wish to visualize.")
-        #print("Since no image path have been provided, we take the first image in our paper.")
-        #response = requests.get("https://dl.fbaipublicfiles.com/dino/img.png")
+        print("Please use the `--image_path` argument to indicate the path of the image you wish to visualize.")
+        print("Since no image path have been provided, we take the image in our paper.")
         response = requests.get("http://m.qpic.cn/psc?/V53mbERq3lU0kJ1E4sEy2ov0ue10cyie/ruAMsa53pVQWN7FLK88i5gVpcX9cZRjWO*ETSURSXng5ie2mU2N5doaVzrB*W9JwPsMeX.fz2hrdWjYiHCO5xpo88YpXDYwqTCZGVZcC5qY!/mnull&bo=dwH0AQAAAAABB6M!&rf=photolist&t=5")
         img = Image.open(BytesIO(response.content))
         img = img.convert('RGB')
@@ -154,32 +148,17 @@ if __name__ == '__main__':
     w_featmap = img.shape[-2] // args.patch_size
     h_featmap = img.shape[-1] // args.patch_size
 
-    #attentions = model.get_last_selfattention(img.to(device))                                                          # 原代码
-    attentions1 = model1.get_last_selfattention(img.to(device))                                                          # 此处进行了修改
-    attentions2 = model2.get_last_selfattention(img.to(device))                                                          # 此处进行了修改
+    attentions1 = model1.get_last_selfattention(img.to(device))                                                          
+    attentions2 = model2.get_last_selfattention(img.to(device))                                                         
 
-    #nh = attentions.shape[1] # number of head                                                                          # 原代码
-    nh1 = attentions1.shape[1]  # number of head                                                                          # 此处进行了修改
-    nh2 = attentions2.shape[1]  # number of head                                                                          # 此处进行了修改
+    nh1 = attentions1.shape[1]  # number of head                                                                          
+    nh2 = attentions2.shape[1]  # number of head                                                                         
 
     # we keep only the output patch attention
-    #attentions = attentions[0, :, 0, 1:].reshape(nh, -1)                                                               # 原代码
-    attentions1 = attentions1[0, :, 0, 1:].reshape(nh1, -1)                                                              # 此处进行了修改
-    attentions2 = attentions2[0, :, 0, 1:].reshape(nh2, -1)                                                              # 此处进行了修改
+    attentions1 = attentions1[0, :, 0, 1:].reshape(nh1, -1)                                                             
+    attentions2 = attentions2[0, :, 0, 1:].reshape(nh2, -1)                                                              
 
-    #if args.threshold is not None:                                                                                     # 原代码
-        # we keep only a certain percentage of the mass
-    #    val, idx = torch.sort(attentions)
-    #    val /= torch.sum(val, dim=1, keepdim=True)
-    #    cumval = torch.cumsum(val, dim=1)
-    #    th_attn = cumval > (1 - args.threshold)
-    #    idx2 = torch.argsort(idx)
-    #    for head in range(nh):
-    #        th_attn[head] = th_attn[head][idx2[head]]
-    #    th_attn = th_attn.reshape(nh, w_featmap, h_featmap).float()
-        # interpolate
-    #    th_attn = nn.functional.interpolate(th_attn.unsqueeze(0), scale_factor=args.patch_size, mode="nearest")[0].cpu().numpy()
-    if args.threshold is not None:                                                                                       # 此处进行了修改
+    if args.threshold is not None:                                                                                      
         # we keep only a certain percentage of the mass
         val1, idx1 = torch.sort(attentions1)
         val1 /= torch.sum(val1, dim=1, keepdim=True)
@@ -192,7 +171,7 @@ if __name__ == '__main__':
         # interpolate
         th_attn1 = nn.functional.interpolate(th_attn1.unsqueeze(0), scale_factor=args.patch_size, mode="nearest")[0].cpu().numpy()
 
-    if args.threshold is not None:                                                                                      # 此处进行了修改
+    if args.threshold is not None:                                                                                     
         # we keep only a certain percentage of the mass
         val2, idx2 = torch.sort(attentions2)
         val2 /= torch.sum(val2, dim=1, keepdim=True)
@@ -205,52 +184,41 @@ if __name__ == '__main__':
         # interpolate
         th_attn2 = nn.functional.interpolate(th_attn2.unsqueeze(0), scale_factor=args.patch_size, mode="nearest")[0].cpu().numpy()
 
-
-    #attentions = attentions.reshape(nh, w_featmap, h_featmap)                                                          # 原代码
-    #attentions = nn.functional.interpolate(attentions.unsqueeze(0), scale_factor=args.patch_size, mode="nearest")[0].cpu().numpy()
-    attentions1 = attentions1.reshape(nh1, w_featmap, h_featmap)                                                          # 此处进行了修改
+    attentions1 = attentions1.reshape(nh1, w_featmap, h_featmap)                                                          
     attentions1 = nn.functional.interpolate(attentions1.unsqueeze(0), scale_factor=args.patch_size, mode="nearest")[
         0].cpu().numpy()
-    attentions2 = attentions2.reshape(nh2, w_featmap, h_featmap)                                                          # 此处进行了修改
+    attentions2 = attentions2.reshape(nh2, w_featmap, h_featmap)                                                          
     attentions2 = nn.functional.interpolate(attentions2.unsqueeze(0), scale_factor=args.patch_size, mode="nearest")[
         0].cpu().numpy()
 
     # save attentions heatmaps
-    #os.makedirs(args.output_dir, exist_ok=True)                                                                        # 原代码
-    os.makedirs(args.output_dir1, exist_ok=True)                                                                        # 此处进行了修改
-    os.makedirs(args.output_dir2, exist_ok=True)                                                                        # 此处进行了修改
+    os.makedirs(args.output_dir1, exist_ok=True)                                                                       
+    os.makedirs(args.output_dir2, exist_ok=True)                                                                       
 
     #torchvision.utils.save_image(torchvision.utils.make_grid(img, normalize=True, scale_each=True), os.path.join(args.output_dir, "img.png"))
     torchvision.utils.save_image(torchvision.utils.make_grid(img, normalize=True, scale_each=True),
-                                 os.path.join(args.output_dir1, "img.png"))                                             # 此处进行了修改
+                                 os.path.join(args.output_dir1, "img.png"))                                             
     torchvision.utils.save_image(torchvision.utils.make_grid(img, normalize=True, scale_each=True),
-                                 os.path.join(args.output_dir2, "img.png"))                                             # 此处进行了修改
+                                 os.path.join(args.output_dir2, "img.png"))                                            
 
-    #for j in range(nh):                                                                                                # 原代码
-    #    fname = os.path.join(args.output_dir, "attn-head" + str(j) + ".png")
-    #    plt.imsave(fname=fname, arr=attentions[j], format='png')
-    #    print(f"{fname} saved.")
-    for j in range(nh1):                                                                                                # 此处进行了修改
+    for j in range(nh1):                                                                                                
         fname = os.path.join(args.output_dir1, "attn-head" + str(j) + ".png")
         plt.imsave(fname=fname, arr=attentions1[j], format='png')
         print(attentions1[j])
         print(f"{fname} saved.")
-    for j in range(nh2):                                                                                                # 此处进行了修改
+    for j in range(nh2):                                                                                               
         fname = os.path.join(args.output_dir2, "attn-head" + str(j) + ".png")
         plt.imsave(fname=fname, arr=attentions2[j], format='png')
         print(attentions2[j])
         print(f"{fname} saved.")
 
-    #if args.threshold is not None:                                                                                     # 原代码
-    #    image = skimage.io.imread(os.path.join(args.output_dir, "img.png"))
-    #    for j in range(nh):
-    #        display_instances(image, th_attn[j], fname=os.path.join(args.output_dir, "mask_th" + str(args.threshold) + "_head" + str(j) +".png"), blur=False)
-    if args.threshold is not None:                                                                                       # 此处进行了修改
+  
+    if args.threshold is not None:                                                                                       
         image = skimage.io.imread(os.path.join(args.output_dir1, "img.png"))
         for j in range(nh1):
             display_instances(image, th_attn1[j], fname=os.path.join(args.output_dir1, "mask_th" + str(args.threshold) + "_head" + str(j) +".png"), blur=False)
 
-    if args.threshold is not None:                                                                                       # 此处进行了修改
+    if args.threshold is not None:                                                                                     
         image = skimage.io.imread(os.path.join(args.output_dir2, "img.png"))
         for j in range(nh2):
             display_instances(image, th_attn2[j], fname=os.path.join(args.output_dir2, "mask_th" + str(args.threshold) + "_head" + str(j) +".png"), blur=False)
