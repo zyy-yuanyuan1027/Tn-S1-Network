@@ -84,27 +84,20 @@ def display_instances(image, mask, fname="test", figsize=(5, 5), blur=False, con
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Visualize Self-Attention maps')
-    #parser.add_argument('--arch', default='vit_small', type=str,                                                       # 原代码
-    #    choices=['vit_tiny', 'vit_small', 'vit_base'], help='Architecture (support only ViT atm).')
-    parser.add_argument('--arch', default='vit_tiny', type=str,                                                         # 此处进行了修改
+    parser.add_argument('--arch', default='vit_tiny', type=str,                                                         
                         choices=['vit_tiny', 'vit_small', 'vit_base'], help='Architecture (support only ViT atm).')
     parser.add_argument('--patch_size', default=16, type=int, help='Patch resolution of the model.')
-    #parser.add_argument('--pretrained_weights', default='', type=str,                                                  # 原代码
-    #    help="Path to pretrained weights to load.")
-    parser.add_argument('--pretrained_weights', default='./train-t2-4for-0.997/checkpoint.pth', type=str,
-                        help="Path to pretrained weights to load.")
-    #parser.add_argument("--checkpoint_key", default="teacher", type=str,                                              # 原代码
-    #    help='Key to use in the checkpoint (example: "teacher")')
-    parser.add_argument("--checkpoint_key1", default="teacher1", type=str,                                              # 此处进行了修改
+    parser.add_argument('--pretrained_weights', default='', type=str,                                                  
+        help="Path to pretrained weights to load."
+    parser.add_argument("--checkpoint_key1", default="teacher1", type=str,                                             
                         help='Key to use in the checkpoint (example: "teacher")')
-    parser.add_argument("--checkpoint_key2", default="teacher2", type=str,                                              # 此处进行了修改
+    parser.add_argument("--checkpoint_key2", default="teacher2", type=str,                                            
                         help='Key to use in the checkpoint (example: "teacher")')
     #parser.add_argument("--image_path", default=None, type=str, help="Path of the image to load.")
     parser.add_argument("--image_path", default=None, type=str, help="Path of the image to load.")
     parser.add_argument("--image_size", default=(480, 480), type=int, nargs="+", help="Resize image.")                 
-    #parser.add_argument('--output_dir', default='.', help='Path where to save visualizations.')                        # 原代码
-    parser.add_argument('--output_dir1', default='attention-teacher1-t2', help='Path where to save visualizations.')                        # 此处进行了修改
-    parser.add_argument('--output_dir2', default='attention-teacher2-t2', help='Path where to save visualizations.')                        # 此处进行了修改
+    parser.add_argument('--output_dir1', default='attention-teacher1-t2', help='Path where to save visualizations.')                        
+    parser.add_argument('--output_dir2', default='attention-teacher2-t2', help='Path where to save visualizations.')                        
     parser.add_argument("--threshold", type=float, default=None, help="""We visualize masks
         obtained by thresholding the self-attention maps to keep xx% of the mass.""")
     args = parser.parse_args()
