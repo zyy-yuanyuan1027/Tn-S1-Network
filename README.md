@@ -33,3 +33,12 @@ A Vision Transformer model for self-supervised learning of two teacher networks 
 ```
 python T2-S1-add.py
 ```
+### Evaluation of the T3-S1 model
+The Vision Transformer model for self-supervised learning of three teacher networks and one student network is evaluated on the dataset using the first feature-dimension combination method.
+```
+python T3-S1-cat.py
+```
+A Vision Transformer model for self-supervised learning of three teacher networks and one student network is evaluated on the dataset using the second feature dimension combination method.
+```
+python T3-S1-add.py
+```
