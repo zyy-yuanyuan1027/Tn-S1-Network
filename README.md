@@ -13,3 +13,8 @@ The Vision Transformer model for self-supervised learning of two teacher network
 ```
 python T2-S1 Network.py
 ```
+### Training of T3-S1 model
+The Vision Transformer model for self-supervised learning of three teacher networks and one student network that we use in the article is trained on three datasets.
+```
+python T3-S1 Network.py
+```
