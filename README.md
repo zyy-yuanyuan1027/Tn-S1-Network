@@ -24,3 +24,12 @@ In this paper, two approaches are proposed for the evaluation of the multi-teach
 ```
 python linear.py
 ```
+### Evaluation of the T2-S1 model
+The Vision Transformer model for self-supervised learning of two teacher networks and one student network is evaluated on the dataset using the first feature-dimension combination method.
+```
+python T2-S1-cat.py
+```
+A Vision Transformer model for self-supervised learning of two teacher networks and one student network is evaluated on the dataset using the second feature dimension combination method.
+```
+python T2-S1-add.py
+```
