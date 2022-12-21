@@ -8,3 +8,8 @@ Here we are using the source code of the DINO model trained on three datasets.
 ```
 python main_dino.py
 ```
+### Training of T2-S1 model
+The Vision Transformer model for self-supervised learning of two teacher networks and one student network that we use in the article is trained on three datasets.
+```
+python T2-S1 Network.py
+```
