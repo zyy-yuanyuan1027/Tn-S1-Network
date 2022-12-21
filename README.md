@@ -42,3 +42,13 @@ A Vision Transformer model for self-supervised learning of three teacher network
 ```
 python T3-S1-add.py
 ```
+## Attention Image Visualization
+We can see the self-attention of the [CLS] tokens of the DINO model on different heads of the last layer by running the code:
+```
+python visualize_attention.py
+```
+We can see the self-attention of the [CLS] tokens of the T2-S1 model used in the paper on different heads of the last layer by applying the following code:
+```
+python visualize_attention_t2.py
+```
+
